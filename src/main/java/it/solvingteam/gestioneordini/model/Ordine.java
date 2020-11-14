@@ -3,10 +3,13 @@ package it.solvingteam.gestioneordini.model;
 import java.util.HashSet;
 import java.util.Set;
 
+
 public class Ordine implements Comparable<Ordine> {
 	private Long idOrdine;
 	private String nomeDestinatario, indirizzoSpedizione;
 	private Set<Articolo> articoliOrdinati=new HashSet<>();
+	private StatoOrdine statoOrdine=StatoOrdine.IN_CONSEGNA;
+
 	public Long getIdOrdine() {
 		return idOrdine;
 	}
@@ -14,7 +17,6 @@ public class Ordine implements Comparable<Ordine> {
 	public Ordine() {}
 	
 	public Ordine(String nomeDestinatario, String indirizzoSpedizione) {
-		super();
 		this.nomeDestinatario = nomeDestinatario;
 		this.indirizzoSpedizione = indirizzoSpedizione;
 	}
@@ -47,6 +49,18 @@ public class Ordine implements Comparable<Ordine> {
 		this.articoliOrdinati = articoliOrdinati;
 	}
 	
+	public StatoOrdine getStatoOrdine() {
+		return statoOrdine;
+	}
+
+	public void setStatoOrdine(StatoOrdine statoOrdine) {
+		this.statoOrdine = statoOrdine;
+	}
+	
+	public boolean isConsegnato() {
+		return (statoOrdine==StatoOrdine.CONSEGNATO);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		boolean result=false;
