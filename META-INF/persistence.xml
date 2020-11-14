@@ -6,6 +6,9 @@
 	<persistence-unit name="manytomanyjpa_unit" transaction-type="RESOURCE_LOCAL">
 		<class>it.solvingteam.gestioneordini.model.Ordine</class>
 		<class>it.solvingteam.gestioneordini.model.Articolo</class>
+		<class>it.solvingteam.gestioneordini.model.Categoria</class>
+		<class>it.solvingteam.gestioneordini.model.Utente</class>
+		<class>it.solvingteam.gestioneordini.model.Ruolo</class>
 		<properties>
 			<!-- setup con MySql -->
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />

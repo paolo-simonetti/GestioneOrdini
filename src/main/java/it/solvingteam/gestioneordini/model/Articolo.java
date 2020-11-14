@@ -3,12 +3,40 @@ package it.solvingteam.gestioneordini.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="articolo")
 public class Articolo {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_articolo")
 	private Long idArticolo;
+	
+	@Column(name = "descrizione")
 	private String descrizione;
+	
+	@Column(name = "prezzo_singolo")
 	private Integer prezzoSingolo;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ordine_fk")
 	private Ordine ordineDiAcquisto;
-	private Set<Categoria> categorieDiAfferenza=new HashSet<>();
+	
+	@ManyToMany
+	@JoinTable(name = "articolo_categoria", joinColumns = @JoinColumn(name = "articolo_id", referencedColumnName = "id_articolo"), inverseJoinColumns = @JoinColumn(name = "categoria_id", referencedColumnName = "id_categoria"))
+	private Set<Categoria> categorieDiAfferenza=new HashSet<>(0);
 	
 	public Long getIdArticolo() {
 		return idArticolo;

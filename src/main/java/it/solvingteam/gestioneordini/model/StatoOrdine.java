@@ -4,7 +4,8 @@ import java.util.TreeMap;
 
 public enum StatoOrdine {
 	IN_CONSEGNA("inConsegna"),
-	CONSEGNATO("consegnato");
+	CONSEGNATO("consegnato"),
+	ANNULLATO("annullato");
 	private String statoOrdine;
 	
 	
@@ -21,6 +22,7 @@ public enum StatoOrdine {
 		TreeMap <String, StatoOrdine> conversioneStatoOrdine=new TreeMap<>();
 		conversioneStatoOrdine.put("inConsegna",IN_CONSEGNA);
 		conversioneStatoOrdine.put("consegnato",CONSEGNATO);
+		conversioneStatoOrdine.put("annullato",ANNULLATO);
 	}
 	
 }

@@ -1,13 +1,45 @@
 package it.solvingteam.gestioneordini.model;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+@Entity
+@Table(name="ordine")
 public class Ordine implements Comparable<Ordine> {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_ordine")
 	private Long idOrdine;
-	private String nomeDestinatario, indirizzoSpedizione;
+
+	@Column(name = "indirizzo_spedizione")
+	private String indirizzoSpedizione;
+	
+	@Column(name="data_effettuazione") 
+	private Date dataEffettuazione;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "utente_fk")
+	private Utente destinatario;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ordineDiAcquisto")
 	private Set<Articolo> articoliOrdinati=new HashSet<>();
+	
+	@Enumerated(EnumType.STRING)
 	private StatoOrdine statoOrdine=StatoOrdine.IN_CONSEGNA;
 
 	public Long getIdOrdine() {
@@ -16,21 +48,21 @@ public class Ordine implements Comparable<Ordine> {
 
 	public Ordine() {}
 	
-	public Ordine(String nomeDestinatario, String indirizzoSpedizione) {
-		this.nomeDestinatario = nomeDestinatario;
+	public Ordine(String indirizzoSpedizione, Date dataEffettuazione) {
 		this.indirizzoSpedizione = indirizzoSpedizione;
+		this.dataEffettuazione=dataEffettuazione;
 	}
 
 	public void setIdOrdine(Long idOrdine) {
 		this.idOrdine = idOrdine;
 	}
 	
-	public String getNomeDestinatario() {
-		return nomeDestinatario;
+	public Utente getDestinatario() {
+		return destinatario;
 	}
 	
-	public void setNomeDestinatario(String nomeDestinatario) {
-		this.nomeDestinatario = nomeDestinatario;
+	public void setDestinatario(Utente destinatario) {
+		this.destinatario = destinatario;
 	}
 	
 	public String getIndirizzoSpedizione() {
@@ -61,6 +93,14 @@ public class Ordine implements Comparable<Ordine> {
 		return (statoOrdine==StatoOrdine.CONSEGNATO);
 	}
 
+	public Date getDataEffettuazione() {
+		return dataEffettuazione;
+	}
+
+	public void setDataEffettuazione(Date dataEffettuazione) {
+		this.dataEffettuazione = dataEffettuazione;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		boolean result=false;
@@ -75,19 +115,23 @@ public class Ordine implements Comparable<Ordine> {
 				}
 			}
 			// Se sono qui, vuol dire che gli articoli dei due ordini coincidono: quindi, confronto destinatari e indirizzi di spedizione
-			result=nomeDestinatario.equals(ordine.getNomeDestinatario())&&indirizzoSpedizione.equals(ordine.getIndirizzoSpedizione());
+			result=destinatario.equals(ordine.getDestinatario())&&indirizzoSpedizione.equals(ordine.getIndirizzoSpedizione())&&
+					dataEffettuazione.equals(ordine.getDataEffettuazione());
 		}
 		return result;
 	}
 
+
 	@Override
 	public String toString() {
-		return ("Ordine[id="+idOrdine+",nomeDestinatario="+nomeDestinatario+",indirizzoSpedizione"+indirizzoSpedizione+"]");
+		return "Ordine [idOrdine=" + idOrdine + ", indirizzoSpedizione=" + indirizzoSpedizione + ", dataEffettuazione="
+				+ dataEffettuazione + ", destinatario=" + destinatario + ", articoli ordinati:" + articoliOrdinati.size()
+				+ ", statoOrdine=" + statoOrdine + "]";
 	}
 
 	@Override
 	public int compareTo(Ordine ordine) {
-		return nomeDestinatario.compareTo(ordine.getNomeDestinatario());
+		return dataEffettuazione.compareTo(ordine.getDataEffettuazione());
 	}
 	
 }
