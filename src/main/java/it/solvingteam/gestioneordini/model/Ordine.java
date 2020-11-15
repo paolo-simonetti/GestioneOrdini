@@ -1,6 +1,6 @@
 package it.solvingteam.gestioneordini.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +30,7 @@ public class Ordine implements Comparable<Ordine> {
 	private String indirizzoSpedizione;
 	
 	@Column(name="data_effettuazione") 
-	private Date dataEffettuazione;
+	private LocalDate dataEffettuazione;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utente_fk")
@@ -40,7 +40,7 @@ public class Ordine implements Comparable<Ordine> {
 	private Set<Articolo> articoliOrdinati=new HashSet<>();
 	
 	@Enumerated(EnumType.STRING)
-	private StatoOrdine statoOrdine=StatoOrdine.IN_CONSEGNA;
+	private StatoOrdine statoOrdine=StatoOrdine.CREATO;
 
 	public Long getIdOrdine() {
 		return idOrdine;
@@ -48,7 +48,7 @@ public class Ordine implements Comparable<Ordine> {
 
 	public Ordine() {}
 	
-	public Ordine(String indirizzoSpedizione, Date dataEffettuazione) {
+	public Ordine(String indirizzoSpedizione, LocalDate dataEffettuazione) {
 		this.indirizzoSpedizione = indirizzoSpedizione;
 		this.dataEffettuazione=dataEffettuazione;
 	}
@@ -89,15 +89,27 @@ public class Ordine implements Comparable<Ordine> {
 		this.statoOrdine = statoOrdine;
 	}
 	
+	public boolean isCreato() {
+		return (statoOrdine==StatoOrdine.CREATO);
+	}
+
+	public boolean isInConsegna() {
+		return (statoOrdine==StatoOrdine.IN_CONSEGNA);
+	}
+	
 	public boolean isConsegnato() {
 		return (statoOrdine==StatoOrdine.CONSEGNATO);
 	}
-
-	public Date getDataEffettuazione() {
+	
+	public boolean isAnnullato() {
+		return (statoOrdine==StatoOrdine.ANNULLATO);
+	}
+	
+	public LocalDate getDataEffettuazione() {
 		return dataEffettuazione;
 	}
 
-	public void setDataEffettuazione(Date dataEffettuazione) {
+	public void setDataEffettuazione(LocalDate dataEffettuazione) {
 		this.dataEffettuazione = dataEffettuazione;
 	}
 
@@ -114,9 +126,9 @@ public class Ordine implements Comparable<Ordine> {
 					return false; // se i due ordini differiscono per almeno un articolo, sono due ordini diversi
 				}
 			}
-			// Se sono qui, vuol dire che gli articoli dei due ordini coincidono: quindi, confronto destinatari e indirizzi di spedizione
+			// Se sono qui, vuol dire che gli articoli dei due ordini coincidono: quindi, confronto destinatari, indirizzi di spedizione e stato
 			result=destinatario.equals(ordine.getDestinatario())&&indirizzoSpedizione.equals(ordine.getIndirizzoSpedizione())&&
-					dataEffettuazione.equals(ordine.getDataEffettuazione());
+					dataEffettuazione.equals(ordine.getDataEffettuazione())&&statoOrdine.equals(ordine.getStatoOrdine());
 		}
 		return result;
 	}

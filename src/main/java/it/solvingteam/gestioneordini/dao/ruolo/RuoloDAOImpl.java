@@ -21,19 +21,19 @@ public class RuoloDAOImpl implements RuoloDAO {
 	}
 
 	@Override
-	public void update(Ruolo o) throws Exception {
+	public boolean update(Ruolo o) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void insert(Ruolo o) throws Exception {
+	public boolean insert(Ruolo o) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(Ruolo o) throws Exception {
+	public boolean delete(Ruolo o) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -45,7 +45,7 @@ public class RuoloDAOImpl implements RuoloDAO {
 	}
 
 	@Override
-	public Ruolo findByDescrizioneAndCodice(String descrizione, String codice) {
+	public Ruolo findByDescrizioneAndCodice(String descrizione, String codice) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

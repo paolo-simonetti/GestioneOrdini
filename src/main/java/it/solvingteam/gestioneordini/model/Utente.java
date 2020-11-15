@@ -49,7 +49,6 @@ public class Utente implements Comparable<Utente>{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "destinatario")
 	private TreeSet<Ordine> ordiniEffettuati=new TreeSet<>();
 
-	
 	public Utente() {
 	}
 
@@ -131,6 +130,15 @@ public class Utente implements Comparable<Utente>{
 		this.stato = stato;
 	}
 
+	public TreeSet<Ordine> getOrdiniEffettuati() {
+		return ordiniEffettuati;
+	}
+
+	public void setOrdiniEffettuati(TreeSet<Ordine> ordiniEffettuati) {
+		this.ordiniEffettuati = ordiniEffettuati;
+	}
+
+	
 	@Override
 	public String toString() {
 		return "Utente [id=" + id + ", username=" + username + ", password=" + password + ", nome=" + nome

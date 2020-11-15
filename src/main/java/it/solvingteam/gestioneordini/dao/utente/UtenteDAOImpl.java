@@ -24,19 +24,19 @@ public class UtenteDAOImpl implements UtenteDAO {
 	}
 
 	@Override
-	public void update(Utente o) throws Exception {
+	public boolean update(Utente o) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void insert(Utente o) throws Exception {
+	public boolean insert(Utente o) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(Utente o) throws Exception {
+	public boolean delete(Utente o) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
@@ -48,25 +48,25 @@ public class UtenteDAOImpl implements UtenteDAO {
 	}
 
 	@Override
-	public Set<Utente> findByRuolo(Ruolo ruolo) {
+	public Set<Utente> findByRuolo(Ruolo ruolo) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Set<Utente> findByStatoUtente(StatoUtente statoUtente) {
+	public Set<Utente> findByStatoUtente(StatoUtente statoUtente) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Utente findByUsername(String username) {
+	public Utente findByUsername(String username) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Utente findByNomeAndCognomeAndDateCreated(String nome, String cognome, Date dateCreated) {
+	public Utente findByNomeAndCognomeAndDateCreated(String nome, String cognome, Date dateCreated) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}

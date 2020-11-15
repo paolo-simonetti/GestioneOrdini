@@ -29,6 +29,9 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 
 	@Override
 	public Categoria get(Long idCategoria) throws Exception {
+		if (idCategoria==null||idCategoria<=0) {
+			throw new Exception("Errore nell'id della categoria in input");
+		}
 		try {
 			return entityManager.find(Categoria.class, idCategoria);				
 		} catch(Exception e) {
@@ -94,7 +97,27 @@ public class CategoriaDAOImpl implements CategoriaDAO {
 	public boolean insert(Categoria categoriaInstance) throws Exception {
 		if (categoriaInstance == null) {
 			throw new Exception("Problema categoria in input");
+		} 
+		//Controllo se la categoria è già presente nel db 
+		Set<Categoria> elencoCategorie=null;
+		try {
+			elencoCategorie=this.list();				
+		} catch(Exception e) {
+			e.printStackTrace();
+			entityManager.getTransaction().rollback();
+			throw new Exception("Inserimento fallito: non è stato possibile recuperare l'elenco delle categorie già presenti");
 		}
+		//Se categoriaInstance è la prima categoria ad essere inserita nel db, questo blocco viene saltato
+		if (elencoCategorie!=null) {
+			for (Categoria categoria:this.list()) {
+				if (categoria.equals(categoriaInstance)) {
+					entityManager.getTransaction().rollback();
+					throw new Exception("La "+categoriaInstance+ " è già presente nel db");
+				}
+				
+			}	
+		}
+
 		try {
 			entityManager.persist(categoriaInstance);
 			return true;

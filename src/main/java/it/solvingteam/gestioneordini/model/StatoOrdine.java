@@ -3,6 +3,7 @@ package it.solvingteam.gestioneordini.model;
 import java.util.TreeMap;
 
 public enum StatoOrdine {
+	CREATO("creato"),
 	IN_CONSEGNA("inConsegna"),
 	CONSEGNATO("consegnato"),
 	ANNULLATO("annullato");
@@ -23,6 +24,7 @@ public enum StatoOrdine {
 		conversioneStatoOrdine.put("inConsegna",IN_CONSEGNA);
 		conversioneStatoOrdine.put("consegnato",CONSEGNATO);
 		conversioneStatoOrdine.put("annullato",ANNULLATO);
+		conversioneStatoOrdine.put("creato",CREATO);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package it.solvingteam.gestioneordini.dao.articolo;
 
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -10,7 +11,7 @@ import it.solvingteam.gestioneordini.dao.ordine.OrdineDAO;
 import it.solvingteam.gestioneordini.model.Articolo;
 import it.solvingteam.gestioneordini.model.Categoria;
 import it.solvingteam.gestioneordini.model.Ordine;
-import it.solvingteam.gestioneordini.model.StatoOrdine;
+import it.solvingteam.gestioneordini.model.StatoArticolo;
 
 public class ArticoloDAOImpl implements ArticoloDAO {
 	
@@ -26,8 +27,8 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 
 	@Override
 	public Articolo get(Long idArticolo) throws Exception {
-		if (idArticolo==null||idArticolo==null) {
-			throw new Exception("Errore nell'id in input");
+		if (idArticolo==null||idArticolo<=0) {
+			throw new Exception("Errore nell'id dell'articolo in input");
 		}
 		try {
 			return entityManager.find(Articolo.class, idArticolo);				
@@ -53,8 +54,8 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 			e.printStackTrace();
 			throw new Exception("Errore nel recupero dell'ordine associato all'articolo "+articoloInstance);
 		}
-		if (ordineArticolo!=null&&ordineArticolo.getStatoOrdine()!=StatoOrdine.ANNULLATO) {
-			System.err.println("Aggiornamento negato: l'articolo "+articoloInstance +" è stato ordinato da un utente ed è in consegna");
+		if (ordineArticolo!=null&&!ordineArticolo.isCreato()) {
+			System.err.println("Aggiornamento negato: l'articolo "+articoloInstance +" è stato ordinato da un utente ed è in consegna, è stato consegnato o è stato annullato");
 			entityManager.getTransaction().rollback();
 			return false;
 		}		
@@ -75,6 +76,26 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 		if (articoloInstance == null) {
 			throw new Exception("Problema articolo in input");
 		}
+		//Controllo se l'articolo è già presente nel db 
+		Set<Articolo> elencoArticoli=null;
+		try {
+			elencoArticoli=this.list();				
+		} catch(Exception e) {
+			e.printStackTrace();
+			entityManager.getTransaction().rollback();
+			throw new Exception("Inserimento fallito: non è stato possibile recuperare l'elenco degli articoli già presenti sul db");
+		}
+		//Se articoloInstance è il primo articolo ad essere inserito nel db, questo blocco viene saltato
+		if (elencoArticoli!=null) {
+			for (Articolo articolo:this.list()) {
+				if (articolo.equals(articoloInstance)) {
+					entityManager.getTransaction().rollback();
+					throw new Exception("L'articolo "+articoloInstance+ " è già presente nel db");
+				}
+				
+			}	
+		}
+
 		try {
 			entityManager.persist(articoloInstance);
 			return true;
@@ -90,7 +111,7 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 			throw new Exception("Problema valore in input");
 		}
 		entityManager.getTransaction().begin();
-		if (articoloInstance.getOrdineDiAcquisto().getStatoOrdine()!=StatoOrdine.ANNULLATO) {
+		if (articoloInstance.getOrdineDiAcquisto().isInConsegna()||articoloInstance.getOrdineDiAcquisto().isConsegnato()) {
 			System.err.println("Rimozione fallita: l'articolo è in consegna o è stato consegnato a un utente");
 			entityManager.getTransaction().rollback();
 			return false;
@@ -146,6 +167,20 @@ public class ArticoloDAOImpl implements ArticoloDAO {
 			System.err.println("Errore nell'elencazione degli articoli");
 			return null;
 		}
+	}
+	
+	@Override
+	public Set<Articolo> findAllByStatoArticolo(StatoArticolo statoArticolo) throws Exception {
+		if (statoArticolo==null) {
+			throw new Exception("Problema StatoArticolo in input");
+		}
+		Set<Articolo> articoliInStatoArticolo=new TreeSet<>();
+		articoliInStatoArticolo=entityManager.createQuery("from Articolo a where a.StatoArticolo="+statoArticolo,Articolo.class)
+				.getResultList().stream().collect(Collectors.toSet());
+		if (articoliInStatoArticolo==null) {
+			System.err.println("Non sono stati trovati articoli il cui stato sia "+statoArticolo);
+		}
+		return articoliInStatoArticolo;
 	}
 
 }

@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +31,10 @@ public class Articolo {
 	
 	@Column(name = "prezzo_singolo")
 	private Integer prezzoSingolo;
+	
+	@Enumerated(EnumType.STRING)
+	private StatoArticolo statoArticolo=StatoArticolo.DISPONIBILE;
+
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "ordine_fk")
@@ -78,6 +84,23 @@ public class Articolo {
 		this.categorieDiAfferenza = categorieDiAfferenza;
 	}
 	
+	public StatoArticolo getStatoArticolo() {
+		return statoArticolo;
+	}
+
+	public void setStatoArticolo(StatoArticolo statoArticolo) {
+		this.statoArticolo = statoArticolo;
+	}
+
+	public boolean isDisponibile() {
+		return (statoArticolo==StatoArticolo.DISPONIBILE);
+	}
+	
+	public boolean isEsaurito() {
+		return (statoArticolo==StatoArticolo.ESAURITO);
+	}
+
+	
 	public Articolo(String descrizione, Integer prezzoSingolo) {
 		this.descrizione = descrizione;
 		this.prezzoSingolo = prezzoSingolo;
@@ -92,7 +115,8 @@ public class Articolo {
 		}
 		if (o instanceof Articolo) {
 			Articolo articolo=(Articolo) o;
-			return (descrizione==articolo.getDescrizione())&&(prezzoSingolo==articolo.getPrezzoSingolo());
+			return (descrizione.equals(articolo.getDescrizione())&&prezzoSingolo==articolo.getPrezzoSingolo()&&
+					statoArticolo.equals(articolo.getStatoArticolo()));
 		} else {
 			return false;
 		}
