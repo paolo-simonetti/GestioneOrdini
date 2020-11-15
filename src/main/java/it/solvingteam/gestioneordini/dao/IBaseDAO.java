@@ -10,11 +10,11 @@ public interface IBaseDAO<T>{
 
 	public T get(Long id) throws Exception;
 
-	public void update(T o) throws Exception;
+	public boolean update(T o) throws Exception;
 
-	public void insert(T o) throws Exception;
+	public boolean insert(T o) throws Exception;
 
-	public void delete(T o) throws Exception;
+	public boolean delete(T o) throws Exception;
 
 	public void setEntityManager(EntityManager entityManager);
 

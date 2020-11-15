@@ -7,8 +7,8 @@ import it.solvingteam.gestioneordini.model.Categoria;
 import it.solvingteam.gestioneordini.model.Ordine;
 
 public interface CategoriaDAO extends IBaseDAO<Categoria> {
-	public Categoria findAllByDescrizione(String descrizione);
-	public Set<Categoria> findAllByOrdine(Ordine ordine);
-	public Integer SumPrezzoSingoloByCategoria(Categoria categoria);
+	public Categoria findByDescrizione(String descrizione) throws Exception;
+	public Set<Categoria> findAllByOrdine(Ordine ordineInstance) throws Exception;
+	public Integer SumPrezzoSingoloByCategoria(Categoria categoriaInstance) throws Exception;
 	
 }
