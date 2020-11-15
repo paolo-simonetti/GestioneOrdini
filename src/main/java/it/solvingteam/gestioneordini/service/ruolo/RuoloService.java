@@ -5,4 +5,6 @@ import it.solvingteam.gestioneordini.service.IBaseService;
 
 public interface RuoloService extends IBaseService<Ruolo> {
 
+	public Ruolo trovaTramiteDescrizioneECodice(String descrizione,String codice);
+
 }

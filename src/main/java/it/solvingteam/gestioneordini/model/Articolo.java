@@ -78,21 +78,12 @@ public class Articolo {
 		this.categorieDiAfferenza = categorieDiAfferenza;
 	}
 	
-	public Articolo(String descrizione, Integer prezzoSingolo, Ordine ordineDiAcquisto) {
+	public Articolo(String descrizione, Integer prezzoSingolo) {
 		this.descrizione = descrizione;
 		this.prezzoSingolo = prezzoSingolo;
-		this.ordineDiAcquisto = ordineDiAcquisto;
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((descrizione == null) ? 0 : descrizione.hashCode());
-		result = prime * result + ((ordineDiAcquisto == null) ? 0 : ordineDiAcquisto.hashCode());
-		result = prime * result + ((prezzoSingolo == null) ? 0 : prezzoSingolo.hashCode());
-		return result;
-	}
+	
+	public Articolo() {}
 
 	@Override
 	public boolean equals(Object o) {
